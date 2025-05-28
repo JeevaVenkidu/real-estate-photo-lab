@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Mail, Phone, MessageCircle, Clock } from 'lucide-react';
+import { Mail, Phone, MessageCircle, Clock, Send, Upload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
@@ -79,13 +79,13 @@ export const Contact: React.FC = () => {
 
   return (
     <div className="min-h-screen pt-16">
-      <ParticleBackground />
+      <ParticleBackground intensity="low" />
       
       {/* Hero Section */}
       <section className="py-20 px-4">
-        <div className="max-w-6xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto text-center">
           <motion.h1
-            className="text-5xl md:text-6xl font-bold mb-6 gradient-text"
+            className="text-4xl md:text-5xl font-bold mb-6 gradient-text"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
@@ -94,7 +94,7 @@ export const Contact: React.FC = () => {
           </motion.h1>
           
           <motion.p
-            className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto"
+            className="text-lg text-gray-300 mb-12 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -122,11 +122,11 @@ export const Contact: React.FC = () => {
         </div>
       </section>
 
-      {/* Modern Contact Form */}
+      {/* Contact Form */}
       <section className="py-20 px-4">
         <div className="max-w-2xl mx-auto">
           <motion.h2
-            className="text-3xl font-bold text-center mb-12 gradient-text"
+            className="text-3xl font-bold text-center mb-8 gradient-text"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -148,7 +148,7 @@ export const Contact: React.FC = () => {
                           <Input 
                             placeholder="John Doe" 
                             {...field}
-                            className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-cyan-400"
+                            className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-cyan-400 focus:ring-cyan-400"
                           />
                         </FormControl>
                         <FormMessage />
@@ -167,7 +167,7 @@ export const Contact: React.FC = () => {
                             type="email"
                             placeholder="john@example.com" 
                             {...field}
-                            className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-cyan-400"
+                            className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-cyan-400 focus:ring-cyan-400"
                           />
                         </FormControl>
                         <FormMessage />
@@ -188,7 +188,7 @@ export const Contact: React.FC = () => {
                             type="tel"
                             placeholder="+1 (555) 123-4567" 
                             {...field}
-                            className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-cyan-400"
+                            className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-cyan-400 focus:ring-cyan-400"
                           />
                         </FormControl>
                         <FormMessage />
@@ -204,7 +204,7 @@ export const Contact: React.FC = () => {
                         <FormLabel className="text-white">Service Needed</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger className="bg-white/10 border-white/20 text-white focus:border-cyan-400">
+                            <SelectTrigger className="bg-white/10 border-white/20 text-white focus:border-cyan-400 focus:ring-cyan-400">
                               <SelectValue placeholder="Select a service" />
                             </SelectTrigger>
                           </FormControl>
@@ -233,7 +233,7 @@ export const Contact: React.FC = () => {
                       <FormControl>
                         <Textarea 
                           placeholder="Tell us about your project, timeline, and any specific requirements..."
-                          className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-cyan-400 min-h-[120px]"
+                          className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-cyan-400 focus:ring-cyan-400 min-h-[100px] resize-none"
                           {...field}
                         />
                       </FormControl>
@@ -242,20 +242,34 @@ export const Contact: React.FC = () => {
                   )}
                 />
 
-                <Button 
-                  type="submit" 
-                  className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white py-6 text-lg font-semibold"
-                  disabled={form.formState.isSubmitting}
-                >
-                  {form.formState.isSubmitting ? (
-                    <div className="flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                      Sending...
-                    </div>
-                  ) : (
-                    'Send Message'
-                  )}
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button 
+                    type="submit" 
+                    className="flex-1 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white py-3 font-semibold"
+                    disabled={form.formState.isSubmitting}
+                  >
+                    {form.formState.isSubmitting ? (
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Sending...
+                      </div>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4 mr-2" />
+                        Send Message
+                      </>
+                    )}
+                  </Button>
+                  
+                  <Button 
+                    type="button"
+                    variant="outline"
+                    className="flex-1 border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-white"
+                  >
+                    <Upload className="w-4 h-4 mr-2" />
+                    Upload Files
+                  </Button>
+                </div>
               </form>
             </Form>
           </GlassMorphismCard>
@@ -263,11 +277,11 @@ export const Contact: React.FC = () => {
       </section>
 
       {/* Emergency Contact */}
-      <section className="py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="py-16 px-4">
+        <div className="max-w-3xl mx-auto text-center">
           <GlassMorphismCard>
             <motion.h2
-              className="text-2xl md:text-3xl font-bold mb-6 gradient-text"
+              className="text-2xl font-bold mb-4 gradient-text"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
@@ -275,7 +289,7 @@ export const Contact: React.FC = () => {
               Need Same-Day Service?
             </motion.h2>
             <motion.p
-              className="text-lg text-gray-300 mb-6"
+              className="text-gray-300 mb-6"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
