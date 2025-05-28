@@ -1,7 +1,7 @@
 
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Text3D, Center } from '@react-three/drei';
+import { Center } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface FloatingIconProps {
