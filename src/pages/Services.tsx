@@ -273,7 +273,7 @@ export const Services: React.FC = () => {
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Start Free Trial
+                Get Started
               </motion.button>
               <motion.button
                 className="glass-morphism text-white px-8 py-3 rounded-full font-semibold hover:bg-white/20 transition-all duration-300"

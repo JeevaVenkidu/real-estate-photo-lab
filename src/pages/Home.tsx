@@ -42,7 +42,7 @@ export const Home: React.FC = () => {
       company: "Century 21"
     },
     {
-      text: "Professional results at unbeatable prices. The free trial convinced me immediately - now I'm a regular customer.",
+      text: "Professional results at unbeatable prices. I'm impressed with the consistency and attention to detail.",
       author: "Michael Chen",
       role: "Property Photographer",
       company: "Urban Lens Photography"
@@ -74,7 +74,7 @@ export const Home: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            3–5 Free Edits • 8–12h Turnaround • Starting at $0.35/image
+            Professional Quality • 8–12h Turnaround • Starting at $0.35/image
           </motion.p>
           
           <motion.div
@@ -95,7 +95,7 @@ export const Home: React.FC = () => {
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
             >
-              Try Free Edit
+              View Portfolio
             </motion.button>
           </motion.div>
         </div>
@@ -224,7 +224,7 @@ export const Home: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              Get 3-5 free sample edits and see the difference for yourself
+              Upload your images and experience our professional editing quality
             </motion.p>
             <motion.button
               className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white px-10 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300"
@@ -234,7 +234,7 @@ export const Home: React.FC = () => {
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
             >
-              Start Free Trial Now
+              Get Started Now
             </motion.button>
           </GlassMorphismCard>
         </div>

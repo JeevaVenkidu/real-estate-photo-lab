@@ -1,11 +1,16 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Navigation: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+
+  // Scroll to top when route changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -16,12 +21,17 @@ export const Navigation: React.FC = () => {
     { name: 'Contact', path: '/contact' },
   ];
 
+  const handleNavClick = () => {
+    setIsOpen(false);
+    window.scrollTo(0, 0);
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-morphism border-b border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center" onClick={handleNavClick}>
             <motion.div
               className="text-2xl font-bold gradient-text"
               whileHover={{ scale: 1.05 }}
@@ -41,17 +51,11 @@ export const Navigation: React.FC = () => {
                     ? 'text-cyan-400 font-medium'
                     : 'text-white'
                 }`}
+                onClick={handleNavClick}
               >
                 {item.name}
               </Link>
             ))}
-            <motion.button
-              className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white px-6 py-2 rounded-full font-medium hover:shadow-lg transition-all duration-200"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Free Trial
-            </motion.button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -87,14 +91,11 @@ export const Navigation: React.FC = () => {
                         ? 'text-cyan-400 bg-cyan-400/10'
                         : 'text-white hover:text-cyan-400 hover:bg-white/10'
                     }`}
-                    onClick={() => setIsOpen(false)}
+                    onClick={handleNavClick}
                   >
                     {item.name}
                   </Link>
                 ))}
-                <button className="w-full text-left bg-gradient-to-r from-cyan-500 to-purple-500 text-white px-3 py-2 rounded-md font-medium mt-4">
-                  Free Trial
-                </button>
               </div>
             </motion.div>
           )}

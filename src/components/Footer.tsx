@@ -1,7 +1,8 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MessageCircle, MapPin, Clock, Star } from 'lucide-react';
+import { Mail, Phone, MessageCircle, Clock, Star } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -30,6 +31,10 @@ export const Footer: React.FC = () => {
     { icon: MessageCircle, text: 'WhatsApp Chat', href: 'https://wa.me/15551234567' },
     { icon: Clock, text: '24/7 Available', href: null }
   ];
+
+  const handleScrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
 
   return (
     <footer className="relative bg-slate-900/95 backdrop-blur-sm border-t border-white/10">
@@ -67,12 +72,13 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
+                    onClick={handleScrollToTop}
                     className="text-gray-300 hover:text-cyan-400 transition-colors text-sm"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -122,26 +128,6 @@ export const Footer: React.FC = () => {
             </ul>
           </motion.div>
         </div>
-
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center py-8 border-t border-white/10"
-        >
-          <h4 className="text-xl font-semibold text-white mb-2">
-            Ready to Transform Your Photos?
-          </h4>
-          <p className="text-gray-300 mb-4">Get 3-5 free sample edits today</p>
-          <motion.button
-            className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transition-all duration-300"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Start Free Trial
-          </motion.button>
-        </motion.div>
 
         {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center">
