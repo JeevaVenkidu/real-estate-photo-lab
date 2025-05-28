@@ -1,10 +1,21 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { GlassMorphismCard } from '../components/GlassMorphismCard';
-import { ParticleBackground } from '../components/ParticleBackground';
+import { InteractiveParticles } from '../components/InteractiveParticles';
+import { CSSParticles } from '../components/CSSParticles';
+import { ParticleExplosion } from '../components/ParticleExplosion';
 
 export const Services: React.FC = () => {
+  const [explosionTrigger, setExplosionTrigger] = useState(false);
+  const [explosionPos, setExplosionPos] = useState({ x: 0, y: 0 });
+  const [particleEffect, setParticleEffect] = useState<'three' | 'css' | 'none'>('three');
+
+  const handleCardClick = (event: React.MouseEvent) => {
+    setExplosionPos({ x: event.clientX, y: event.clientY });
+    setExplosionTrigger(true);
+    setTimeout(() => setExplosionTrigger(false), 100);
+  };
+
   const services = [
     {
       title: 'HDR Photo Editing',
@@ -95,8 +106,55 @@ export const Services: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-16">
-      <ParticleBackground />
+    <div className="min-h-screen pt-16 relative">
+      {/* Particle Background Selection */}
+      {particleEffect === 'three' && (
+        <InteractiveParticles 
+          count={150} 
+          mouseInteraction={true} 
+          connectionLines={false}
+        />
+      )}
+      {particleEffect === 'css' && (
+        <CSSParticles 
+          count={40} 
+          mouseInteraction={true}
+          colors={['#06b6d4', '#8b5cf6', '#10b981']}
+        />
+      )}
+      
+      {/* Explosion Effect */}
+      <ParticleExplosion 
+        trigger={explosionTrigger}
+        x={explosionPos.x}
+        y={explosionPos.y}
+        particleCount={25}
+      />
+      
+      {/* Particle Effect Controls */}
+      <div className="fixed top-20 right-4 z-40 glass-morphism p-3 rounded-lg">
+        <p className="text-white text-sm mb-2">Particle Effects:</p>
+        <div className="flex flex-col gap-1">
+          <button
+            onClick={() => setParticleEffect('three')}
+            className={`px-3 py-1 text-xs rounded ${particleEffect === 'three' ? 'bg-cyan-500 text-white' : 'bg-white/20 text-gray-300'}`}
+          >
+            3D Interactive
+          </button>
+          <button
+            onClick={() => setParticleEffect('css')}
+            className={`px-3 py-1 text-xs rounded ${particleEffect === 'css' ? 'bg-cyan-500 text-white' : 'bg-white/20 text-gray-300'}`}
+          >
+            CSS Particles
+          </button>
+          <button
+            onClick={() => setParticleEffect('none')}
+            className={`px-3 py-1 text-xs rounded ${particleEffect === 'none' ? 'bg-cyan-500 text-white' : 'bg-white/20 text-gray-300'}`}
+          >
+            None
+          </button>
+        </div>
+      </div>
       
       {/* Hero Section */}
       <section className="py-20 px-4">
@@ -127,32 +185,34 @@ export const Services: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => (
-              <GlassMorphismCard key={service.title} delay={index * 0.1}>
-                <div className="text-center">
-                  <div className="text-5xl mb-4">{service.icon}</div>
-                  <h3 className="text-2xl font-bold mb-2 text-white">{service.title}</h3>
-                  <div className="text-3xl font-bold gradient-text mb-4">{service.price}</div>
-                  <p className="text-gray-300 mb-6">{service.description}</p>
-                  
-                  <div className="text-left space-y-2">
-                    <h4 className="font-semibold text-cyan-400 mb-2">Features:</h4>
-                    <ul className="space-y-1">
-                      {service.features.map((feature, idx) => (
-                        <li key={idx} className="text-gray-300 text-sm flex items-center">
-                          <span className="w-2 h-2 bg-cyan-400 rounded-full mr-2 flex-shrink-0"></span>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div className="mt-6 pt-4 border-t border-white/20">
-                    <div className="flex items-center justify-center text-purple-400">
-                      <span className="text-sm">⏱️ Turnaround: {service.turnaround}</span>
+              <div key={service.title} onClick={handleCardClick}>
+                <GlassMorphismCard delay={index * 0.1}>
+                  <div className="text-center">
+                    <div className="text-5xl mb-4">{service.icon}</div>
+                    <h3 className="text-2xl font-bold mb-2 text-white">{service.title}</h3>
+                    <div className="text-3xl font-bold gradient-text mb-4">{service.price}</div>
+                    <p className="text-gray-300 mb-6">{service.description}</p>
+                    
+                    <div className="text-left space-y-2">
+                      <h4 className="font-semibold text-cyan-400 mb-2">Features:</h4>
+                      <ul className="space-y-1">
+                        {service.features.map((feature, idx) => (
+                          <li key={idx} className="text-gray-300 text-sm flex items-center">
+                            <span className="w-2 h-2 bg-cyan-400 rounded-full mr-2 flex-shrink-0"></span>
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    
+                    <div className="mt-6 pt-4 border-t border-white/20">
+                      <div className="flex items-center justify-center text-purple-400">
+                        <span className="text-sm">⏱️ Turnaround: {service.turnaround}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </GlassMorphismCard>
+                </GlassMorphismCard>
+              </div>
             ))}
           </div>
         </div>
