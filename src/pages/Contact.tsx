@@ -1,104 +1,79 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { GlassMorphismCard } from '../components/GlassMorphismCard';
 import { ParticleBackground } from '../components/ParticleBackground';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Mail, Phone, MessageCircle, Clock } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+
+const formSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Please enter a valid email address'),
+  phone: z.string().optional(),
+  service: z.string().optional(),
+  message: z.string().min(10, 'Message must be at least 10 characters'),
+});
 
 export const Contact: React.FC = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    service: '',
-    message: '',
-    files: null as FileList | null
-  });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      files: e.target.files
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    alert('Thank you! We\'ll get back to you within 24 hours.');
-    
-    // Reset form
-    setFormData({
+  const { toast } = useToast();
+  
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
       name: '',
       email: '',
       phone: '',
       service: '',
       message: '',
-      files: null
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log('Form submitted:', values);
+    
+    // Simulate form submission
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    toast({
+      title: "Message sent successfully!",
+      description: "We'll get back to you within 24 hours.",
     });
+    
+    form.reset();
   };
 
   const contactMethods = [
     {
-      icon: '📧',
+      icon: Mail,
       title: 'Email',
       value: 'hello@realtyfix.com',
       description: 'Send us your photos anytime'
     },
     {
-      icon: '💬',
+      icon: MessageCircle,
       title: 'WhatsApp',
       value: '+1 (555) 123-4567',
       description: 'Quick responses and updates'
     },
     {
-      icon: '📱',
+      icon: Phone,
       title: 'Phone',
       value: '+1 (555) 123-4567',
       description: 'Direct line for urgent requests'
     },
     {
-      icon: '⏰',
+      icon: Clock,
       title: 'Availability',
       value: '24/7 Including Holidays',
       description: 'We never stop working for you'
-    }
-  ];
-
-  const uploadOptions = [
-    {
-      icon: '📤',
-      title: 'Direct Upload',
-      description: 'Use our secure upload form below'
-    },
-    {
-      icon: '📁',
-      title: 'Dropbox Link',
-      description: 'Share a Dropbox folder link'
-    },
-    {
-      icon: '☁️',
-      title: 'Google Drive',
-      description: 'Share Google Drive folder'
-    },
-    {
-      icon: '📧',
-      title: 'Email Attachment',
-      description: 'Send files directly to our email'
     }
   ];
 
@@ -124,8 +99,7 @@ export const Contact: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Ready to transform your real estate photos? Send us your images and let's create something amazing together. 
-            We're available 24/7 to help you succeed.
+            Ready to transform your real estate photos? Send us your images and let's create something amazing together.
           </motion.p>
         </div>
       </section>
@@ -137,7 +111,7 @@ export const Contact: React.FC = () => {
             {contactMethods.map((method, index) => (
               <GlassMorphismCard key={method.title} delay={index * 0.1}>
                 <div className="text-center">
-                  <div className="text-4xl mb-3">{method.icon}</div>
+                  <method.icon className="w-8 h-8 mx-auto mb-3 text-cyan-400" />
                   <h3 className="text-lg font-semibold text-white mb-2">{method.title}</h3>
                   <div className="text-cyan-400 font-medium mb-2">{method.value}</div>
                   <p className="text-gray-300 text-sm">{method.description}</p>
@@ -148,9 +122,9 @@ export const Contact: React.FC = () => {
         </div>
       </section>
 
-      {/* Main Contact Form */}
+      {/* Modern Contact Form */}
       <section className="py-20 px-4">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-2xl mx-auto">
           <motion.h2
             className="text-3xl font-bold text-center mb-12 gradient-text"
             initial={{ opacity: 0, y: 20 }}
@@ -161,203 +135,130 @@ export const Contact: React.FC = () => {
           </motion.h2>
           
           <GlassMorphismCard>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-white font-medium mb-2">Full Name *</label>
-                  <input
-                    type="text"
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormField
+                    control={form.control}
                     name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition-colors"
-                    placeholder="John Doe"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-white">Full Name *</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="John Doe" 
+                            {...field}
+                            className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-cyan-400"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
-                
-                <div>
-                  <label className="block text-white font-medium mb-2">Email Address *</label>
-                  <input
-                    type="email"
+                  
+                  <FormField
+                    control={form.control}
                     name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition-colors"
-                    placeholder="john@example.com"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-white">Email Address *</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="email"
+                            placeholder="john@example.com" 
+                            {...field}
+                            className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-cyan-400"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-white font-medium mb-2">Phone Number</label>
-                  <input
-                    type="tel"
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormField
+                    control={form.control}
                     name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition-colors"
-                    placeholder="+1 (555) 123-4567"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-white">Phone Number</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="tel"
+                            placeholder="+1 (555) 123-4567" 
+                            {...field}
+                            className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-cyan-400"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
-                
-                <div>
-                  <label className="block text-white font-medium mb-2">Service Needed</label>
-                  <select
+                  
+                  <FormField
+                    control={form.control}
                     name="service"
-                    value={formData.service}
-                    onChange={handleInputChange}
-                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-400 transition-colors"
-                  >
-                    <option value="">Select a service</option>
-                    <option value="hdr">HDR Photo Editing</option>
-                    <option value="twilight">Day-to-Dusk Conversion</option>
-                    <option value="staging">Virtual Staging</option>
-                    <option value="sky">Sky Replacement</option>
-                    <option value="removal">Object Removal</option>
-                    <option value="panorama">Panorama 360</option>
-                    <option value="multiple">Multiple Services</option>
-                  </select>
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-white font-medium mb-2">Message</label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  rows={4}
-                  className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition-colors"
-                  placeholder="Tell us about your project, timeline, and any specific requirements..."
-                />
-              </div>
-              
-              <div>
-                <label className="block text-white font-medium mb-2">Upload Photos</label>
-                <div className="relative">
-                  <input
-                    type="file"
-                    name="files"
-                    onChange={handleFileChange}
-                    multiple
-                    accept="image/*,.raw,.cr2,.nef,.arw"
-                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-cyan-500 file:text-white hover:file:bg-cyan-600"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-white">Service Needed</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="bg-white/10 border-white/20 text-white focus:border-cyan-400">
+                              <SelectValue placeholder="Select a service" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="hdr">HDR Photo Editing</SelectItem>
+                            <SelectItem value="twilight">Day-to-Dusk Conversion</SelectItem>
+                            <SelectItem value="staging">Virtual Staging</SelectItem>
+                            <SelectItem value="sky">Sky Replacement</SelectItem>
+                            <SelectItem value="removal">Object Removal</SelectItem>
+                            <SelectItem value="panorama">Panorama 360</SelectItem>
+                            <SelectItem value="multiple">Multiple Services</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 </div>
-                <p className="text-gray-400 text-sm mt-2">
-                  Accepted: JPG, PNG, RAW, TIFF • Max 50MB per file • For larger files, use Dropbox/Google Drive links
-                </p>
-              </div>
-              
-              <motion.button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 text-white py-4 rounded-lg font-semibold text-lg hover:shadow-2xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
-                whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-              >
-                {isSubmitting ? (
-                  <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Sending...
-                  </div>
-                ) : (
-                  'Send Photos for Free Trial'
-                )}
-              </motion.button>
-            </form>
+
+                <FormField
+                  control={form.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-white">Message *</FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          placeholder="Tell us about your project, timeline, and any specific requirements..."
+                          className="bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:border-cyan-400 min-h-[120px]"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button 
+                  type="submit" 
+                  className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white py-6 text-lg font-semibold"
+                  disabled={form.formState.isSubmitting}
+                >
+                  {form.formState.isSubmitting ? (
+                    <div className="flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                      Sending...
+                    </div>
+                  ) : (
+                    'Send Message'
+                  )}
+                </Button>
+              </form>
+            </Form>
           </GlassMorphismCard>
-        </div>
-      </section>
-
-      {/* Upload Options */}
-      <section className="py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          <motion.h2
-            className="text-3xl font-bold text-center mb-12 gradient-text"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            Multiple Ways to Send Files
-          </motion.h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {uploadOptions.map((option, index) => (
-              <GlassMorphismCard key={option.title} delay={index * 0.1}>
-                <div className="text-center">
-                  <div className="text-4xl mb-3">{option.icon}</div>
-                  <h3 className="text-lg font-semibold text-white mb-2">{option.title}</h3>
-                  <p className="text-gray-300 text-sm">{option.description}</p>
-                </div>
-              </GlassMorphismCard>
-            ))}
-          </div>
-          
-          <motion.div
-            className="text-center mt-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <GlassMorphismCard>
-              <h3 className="text-xl font-semibold text-white mb-4">Large File Transfers</h3>
-              <p className="text-gray-300 mb-4">
-                For RAW files or large batches, we recommend using cloud storage solutions:
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <span className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm">Dropbox</span>
-                <span className="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm">Google Drive</span>
-                <span className="bg-purple-500/20 text-purple-400 px-3 py-1 rounded-full text-sm">OneDrive</span>
-                <span className="bg-orange-500/20 text-orange-400 px-3 py-1 rounded-full text-sm">WeTransfer</span>
-              </div>
-            </GlassMorphismCard>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="py-20 px-4">
-        <div className="max-w-4xl mx-auto">
-          <motion.h2
-            className="text-3xl font-bold text-center mb-12 gradient-text"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            Common Questions
-          </motion.h2>
-          
-          <div className="space-y-6">
-            {[
-              {
-                question: "How quickly will I hear back?",
-                answer: "We respond to all inquiries within 4-6 hours, usually much faster. Your free trial edits will be completed within 24 hours."
-              },
-              {
-                question: "What if I need rush delivery?",
-                answer: "We offer same-day and 4-hour rush services for urgent projects. Contact us directly to discuss rush pricing and availability."
-              },
-              {
-                question: "Can you handle large batches?",
-                answer: "Absolutely! We regularly process 100+ image orders. For large projects, we'll provide a custom timeline and may assign a dedicated team."
-              },
-              {
-                question: "What file formats do you deliver?",
-                answer: "We deliver high-resolution JPGs optimized for web and print. RAW files, TIFF, or other formats available upon request."
-              }
-            ].map((faq, index) => (
-              <GlassMorphismCard key={index} delay={index * 0.1}>
-                <div>
-                  <h3 className="text-lg font-semibold text-white mb-2">{faq.question}</h3>
-                  <p className="text-gray-300">{faq.answer}</p>
-                </div>
-              </GlassMorphismCard>
-            ))}
-          </div>
         </div>
       </section>
 
