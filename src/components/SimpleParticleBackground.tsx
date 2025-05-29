@@ -1,5 +1,5 @@
-
 import React, { useRef, useEffect, useState, useCallback } from 'react';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface Particle {
   x: number;
@@ -13,19 +13,18 @@ interface Particle {
 
 interface SimpleParticleBackgroundProps {
   particleCount?: number;
-  isDarkMode?: boolean;
 }
 
 export const SimpleParticleBackground: React.FC<SimpleParticleBackgroundProps> = ({
-  particleCount = 120,
-  isDarkMode = true
+  particleCount = 120
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number>();
   const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef({ x: 0, y: 0 });
+  const { theme } = useTheme();
   
-  const colors = isDarkMode 
+  const colors = theme === 'dark' 
     ? ['#06b6d4', '#8b5cf6', '#10b981', '#f59e0b']
     : ['#0891b2', '#7c3aed', '#059669', '#d97706'];
 
@@ -45,6 +44,8 @@ export const SimpleParticleBackground: React.FC<SimpleParticleBackgroundProps> =
   }, [particleCount, colors]);
 
   const drawConnections = (ctx: CanvasRenderingContext2D, particles: Particle[]) => {
+    const connectionColor = theme === 'dark' ? 'rgba(6, 182, 212, ' : 'rgba(8, 145, 178, ';
+    
     for (let i = 0; i < particles.length; i++) {
       for (let j = i + 1; j < particles.length; j++) {
         const dx = particles[i].x - particles[j].x;
@@ -53,7 +54,7 @@ export const SimpleParticleBackground: React.FC<SimpleParticleBackgroundProps> =
         
         if (distance < 100) {
           const opacity = (100 - distance) / 100 * 0.2;
-          ctx.strokeStyle = `rgba(6, 182, 212, ${opacity})`;
+          ctx.strokeStyle = connectionColor + opacity + ')';
           ctx.lineWidth = 0.5;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
@@ -162,6 +163,11 @@ export const SimpleParticleBackground: React.FC<SimpleParticleBackgroundProps> =
       window.removeEventListener('resize', handleResize);
     };
   }, [animate, handleMouseMove, handleResize, initializeParticles]);
+
+  // Re-initialize particles when theme changes
+  useEffect(() => {
+    initializeParticles();
+  }, [theme, initializeParticles]);
 
   return (
     <canvas

@@ -1,280 +1,142 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ParticleBackground } from '../components/ParticleBackground';
-import { GlassMorphismCard } from '../components/GlassMorphismCard';
-import { ImageComparison } from '../components/ImageComparison';
-import { FloatingIcon } from '../components/FloatingIcon';
-import { AnimatedGradientOrbs } from '../components/AnimatedGradientOrbs';
-import { AdvancedParticleBackground } from '../components/AdvancedParticleBackground';
-import { SimpleParticleBackground } from '../components/SimpleParticleBackground';
-import { SimpleFloatingIcons } from '../components/SimpleFloatingIcons';
-import { Enhanced3DFloatingIcons } from '../components/Enhanced3DFloatingIcons';
+import { Button } from "@/components/ui/button";
+import { SimpleParticleBackground } from "@/components/SimpleParticleBackground";
+import { SimpleFloatingIcons } from "@/components/SimpleFloatingIcons";
+import { ParticleBackground } from "@/components/ParticleBackground";
+import { Enhanced3DFloatingIcons } from "@/components/Enhanced3DFloatingIcons";
+import { AnimatedGradientOrbs } from "@/components/AnimatedGradientOrbs";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
-export const Home: React.FC = () => {
+export const Home = () => {
+  const navigate = useNavigate();
   const [use3D, setUse3D] = useState(true);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    // Detect device capabilities for 3D mode
-    const canvas = document.createElement('canvas');
-    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    const supportsWebGL = !!gl;
-    const isMobile = window.innerWidth < 768;
-    
-    setUse3D(supportsWebGL && !isMobile);
-  }, []);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  const services = [
-    {
-      title: 'HDR Photo Editing',
-      description: 'Professional HDR processing for stunning real estate photos',
-      price: '$0.45',
-      icon: '🏠'
-    },
-    {
-      title: 'Day-to-Dusk Conversion',
-      description: 'Transform day photos into beautiful twilight scenes',
-      price: '$3.00',
-      icon: '🌅'
-    },
-    {
-      title: 'Virtual Staging',
-      description: 'Add furniture and decor to empty rooms',
-      price: '$15.00',
-      icon: '🛋️'
-    },
-    {
-      title: 'Sky Replacement',
-      description: 'Replace dull skies with dramatic cloudscapes',
-      price: '$0.35',
-      icon: '☁️'
-    }
-  ];
-
-  const testimonials = [
-    {
-      text: "RealtyFix transformed my listings! The quality is amazing and turnaround time is perfect for my busy schedule.",
-      author: "Sarah Johnson",
-      role: "Real Estate Agent",
-      company: "Century 21"
-    },
-    {
-      text: "Professional results at unbeatable prices. I'm impressed with the consistency and attention to detail.",
-      author: "Michael Chen",
-      role: "Property Photographer",
-      company: "Urban Lens Photography"
-    }
-  ];
 
   return (
-    <div className="min-h-screen pt-16">
+    <div className="relative min-h-screen overflow-hidden">
       {/* Animated Gradient Orbs */}
       <AnimatedGradientOrbs />
       
       {/* Conditional Particle Background System */}
       {use3D ? (
         <>
-          <AdvancedParticleBackground mousePosition={mousePosition} />
+          <ParticleBackground intensity="medium" />
           <Enhanced3DFloatingIcons />
         </>
       ) : (
         <>
-          <SimpleParticleBackground particleCount={120} isDarkMode={true} />
+          <SimpleParticleBackground particleCount={120} />
           <SimpleFloatingIcons />
         </>
       )}
-      
-      {/* Glass Effect Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900/50 via-transparent to-slate-900/50 pointer-events-none" style={{ zIndex: 2 }} />
-      
-      {/* Hero Section */}
-      <section className="relative py-20 px-4 overflow-hidden" style={{ zIndex: 3 }}>
-        <FloatingIcon icon="🏠" position={[-2, 0, 0]} color="#06b6d4" />
-        <FloatingIcon icon="📸" position={[2, 1, -1]} color="#8b5cf6" />
-        
-        <div className="max-w-6xl mx-auto text-center">
-          <motion.h1
-            className="text-5xl md:text-7xl font-bold mb-6 gradient-text text-glow"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-          >
-            Fast, Affordable Real Estate Photo Editing
-          </motion.h1>
-          
-          <motion.p
-            className="text-xl md:text-2xl text-gray-300 mb-8"
-            initial={{ opacity: 0, y: 20 }}
+
+      {/* Glass effect overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent pointer-events-none" />
+
+      {/* Theme Toggle - positioned in top right */}
+      <div className="absolute top-6 right-6 z-50">
+        <ThemeToggle />
+      </div>
+
+      {/* Hero Content */}
+      <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
+        <div className="max-w-4xl mx-auto text-center space-y-8">
+          {/* Main Heading */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Professional Quality • 8–12h Turnaround • Starting at $0.35/image
-          </motion.p>
-          
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white dark:text-white light:text-slate-900 mb-6 leading-tight">
+              Transform Your
+              <span className="block gradient-text">
+                Memories
+              </span>
+            </h1>
+          </motion.div>
+
+          {/* Subtitle */}
+          <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-xl md:text-2xl text-slate-300 dark:text-slate-300 light:text-slate-600 max-w-3xl mx-auto leading-relaxed"
           >
-            <motion.button
-              className="glass-morphism text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white/20 transition-all duration-300"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
+            Professional photo restoration and enhancement services that bring your precious memories back to life with stunning clarity and detail.
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8"
+          >
+            <Button
+              size="lg"
+              className="glass-morphism hover:bg-white/20 text-white border-white/20 hover:border-white/40 transition-all duration-300 px-8 py-3 text-lg font-semibold group"
+              onClick={() => navigate('/contact')}
+            >
+              Get Started Today
+              <motion.span
+                className="ml-2 inline-block"
+                animate={{ x: [0, 5, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                →
+              </motion.span>
+            </Button>
+            
+            <Button
+              variant="outline"
+              size="lg"
+              className="glass-morphism border-white/30 text-white dark:text-white light:text-slate-900 hover:bg-white/10 transition-all duration-300 px-8 py-3 text-lg"
+              onClick={() => navigate('/portfolio')}
             >
               View Portfolio
-            </motion.button>
+            </Button>
           </motion.div>
-        </div>
-        
-        {/* Floating Scroll Indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse"></div>
-          </div>
-        </motion.div>
-      </section>
 
-      {/* Services Highlights */}
-      <section className="py-20 px-4" style={{ zIndex: 3 }}>
-        <div className="max-w-6xl mx-auto">
-          <motion.h2
-            className="text-4xl font-bold text-center mb-12 gradient-text"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            Our Premium Services
-          </motion.h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.map((service, index) => (
-              <GlassMorphismCard key={service.title} delay={index * 0.1}>
-                <div className="text-center">
-                  <div className="text-4xl mb-4">{service.icon}</div>
-                  <h3 className="text-xl font-semibold mb-2 text-white">{service.title}</h3>
-                  <p className="text-gray-300 mb-4 text-sm">{service.description}</p>
-                  <div className="text-2xl font-bold gradient-text">{service.price}</div>
-                </div>
-              </GlassMorphismCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Portfolio Preview */}
-      <section className="py-20 px-4" style={{ zIndex: 3 }}>
-        <div className="max-w-6xl mx-auto">
-          <motion.h2
-            className="text-4xl font-bold text-center mb-12 gradient-text"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            See the Transformation
-          </motion.h2>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <ImageComparison
-              beforeImage="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&h=400&fit=crop"
-              afterImage="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=400&fit=crop"
-              title="HDR Enhancement"
-            />
-            <ImageComparison
-              beforeImage="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop"
-              afterImage="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=600&h=400&fit=crop"
-              title="Virtual Staging"
-            />
-          </div>
-          
+          {/* Features Grid */}
           <motion.div
-            className="text-center mt-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-16"
           >
-            <button className="glass-morphism text-white px-8 py-3 rounded-full font-semibold hover:bg-white/20 transition-all duration-300">
-              View Full Portfolio
-            </button>
+            <div className="glass-morphism p-6 rounded-xl text-center hover:bg-white/10 transition-all duration-300">
+              <div className="text-3xl mb-4">🏠</div>
+              <h3 className="text-xl font-semibold text-white dark:text-white light:text-slate-900 mb-2">
+                Damage Repair
+              </h3>
+              <p className="text-slate-300 dark:text-slate-300 light:text-slate-600">
+                Fix tears, scratches, and water damage with precision
+              </p>
+            </div>
+            
+            <div className="glass-morphism p-6 rounded-xl text-center hover:bg-white/10 transition-all duration-300">
+              <div className="text-3xl mb-4">✨</div>
+              <h3 className="text-xl font-semibold text-white dark:text-white light:text-slate-900 mb-2">
+                Color Enhancement
+              </h3>
+              <p className="text-slate-300 dark:text-slate-300 light:text-slate-600">
+                Restore faded colors and improve overall image quality
+              </p>
+            </div>
+            
+            <div className="glass-morphism p-6 rounded-xl text-center hover:bg-white/10 transition-all duration-300">
+              <div className="text-3xl mb-4">🎨</div>
+              <h3 className="text-xl font-semibold text-white dark:text-white light:text-slate-900 mb-2">
+                Digital Conversion
+              </h3>
+              <p className="text-slate-300 dark:text-slate-300 light:text-slate-600">
+                Convert physical photos to high-quality digital formats
+              </p>
+            </div>
           </motion.div>
         </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20 px-4" style={{ zIndex: 3 }}>
-        <div className="max-w-4xl mx-auto">
-          <motion.h2
-            className="text-4xl font-bold text-center mb-12 gradient-text"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            What Our Clients Say
-          </motion.h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <GlassMorphismCard key={index} delay={index * 0.2}>
-                <div className="text-center">
-                  <p className="text-gray-300 mb-6 italic text-lg">"{testimonial.text}"</p>
-                  <div className="border-t border-white/20 pt-4">
-                    <p className="font-semibold text-white">{testimonial.author}</p>
-                    <p className="text-cyan-400 text-sm">{testimonial.role}</p>
-                    <p className="text-gray-400 text-sm">{testimonial.company}</p>
-                  </div>
-                </div>
-              </GlassMorphismCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 px-4" style={{ zIndex: 3 }}>
-        <div className="max-w-4xl mx-auto text-center">
-          <GlassMorphismCard>
-            <motion.h2
-              className="text-3xl md:text-4xl font-bold mb-6 gradient-text"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              Ready to Transform Your Listings?
-            </motion.h2>
-            <motion.p
-              className="text-xl text-gray-300 mb-8"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              Contact us to experience our professional editing quality
-            </motion.p>
-            <motion.button
-              className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white px-10 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Get Started Now
-            </motion.button>
-          </GlassMorphismCard>
-        </div>
-      </section>
+      </div>
     </div>
   );
 };
