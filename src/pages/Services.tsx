@@ -172,7 +172,7 @@ export const Services: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {[
-              { step: '1', title: 'Upload Photos', description: 'Send us your raw images via email, Dropbox, or our upload portal' },
+              { step: '1', title: 'Contact Us', description: 'Send us your raw images via email or contact form' },
               { step: '2', title: 'Processing', description: 'Our expert editors work their magic using professional software and techniques' },
               { step: '3', title: 'Quality Check', description: 'Every image undergoes thorough quality control before delivery' },
               { step: '4', title: 'Delivery', description: 'Receive your enhanced photos within the promised timeframe' }
@@ -260,7 +260,7 @@ export const Services: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              Upload your sample images and experience our professional editing quality
+              Contact us to experience our professional editing quality
             </motion.p>
             <motion.div
               className="flex flex-col sm:flex-row gap-4 justify-center"

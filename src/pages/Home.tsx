@@ -84,13 +84,6 @@ export const Home: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             <motion.button
-              className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Upload Sample Images
-            </motion.button>
-            <motion.button
               className="glass-morphism text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white/20 transition-all duration-300"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
@@ -224,7 +217,7 @@ export const Home: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              Upload your images and experience our professional editing quality
+              Contact us to experience our professional editing quality
             </motion.p>
             <motion.button
               className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white px-10 py-4 rounded-full text-lg font-semibold hover:shadow-2xl transition-all duration-300"
