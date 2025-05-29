@@ -1,12 +1,38 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ParticleBackground } from '../components/ParticleBackground';
 import { GlassMorphismCard } from '../components/GlassMorphismCard';
 import { ImageComparison } from '../components/ImageComparison';
 import { FloatingIcon } from '../components/FloatingIcon';
+import { AnimatedGradientOrbs } from '../components/AnimatedGradientOrbs';
+import { AdvancedParticleBackground } from '../components/AdvancedParticleBackground';
+import { SimpleParticleBackground } from '../components/SimpleParticleBackground';
+import { SimpleFloatingIcons } from '../components/SimpleFloatingIcons';
+import { Enhanced3DFloatingIcons } from '../components/Enhanced3DFloatingIcons';
 
 export const Home: React.FC = () => {
+  const [use3D, setUse3D] = useState(true);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    // Detect device capabilities for 3D mode
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    const supportsWebGL = !!gl;
+    const isMobile = window.innerWidth < 768;
+    
+    setUse3D(supportsWebGL && !isMobile);
+  }, []);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   const services = [
     {
       title: 'HDR Photo Editing',
@@ -51,10 +77,27 @@ export const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen pt-16">
-      <ParticleBackground />
+      {/* Animated Gradient Orbs */}
+      <AnimatedGradientOrbs />
+      
+      {/* Conditional Particle Background System */}
+      {use3D ? (
+        <>
+          <AdvancedParticleBackground mousePosition={mousePosition} />
+          <Enhanced3DFloatingIcons />
+        </>
+      ) : (
+        <>
+          <SimpleParticleBackground particleCount={120} isDarkMode={true} />
+          <SimpleFloatingIcons />
+        </>
+      )}
+      
+      {/* Glass Effect Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900/50 via-transparent to-slate-900/50 pointer-events-none" style={{ zIndex: 2 }} />
       
       {/* Hero Section */}
-      <section className="relative py-20 px-4 overflow-hidden">
+      <section className="relative py-20 px-4 overflow-hidden" style={{ zIndex: 3 }}>
         <FloatingIcon icon="🏠" position={[-2, 0, 0]} color="#06b6d4" />
         <FloatingIcon icon="📸" position={[2, 1, -1]} color="#8b5cf6" />
         
@@ -106,7 +149,7 @@ export const Home: React.FC = () => {
       </section>
 
       {/* Services Highlights */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4" style={{ zIndex: 3 }}>
         <div className="max-w-6xl mx-auto">
           <motion.h2
             className="text-4xl font-bold text-center mb-12 gradient-text"
@@ -133,7 +176,7 @@ export const Home: React.FC = () => {
       </section>
 
       {/* Portfolio Preview */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4" style={{ zIndex: 3 }}>
         <div className="max-w-6xl mx-auto">
           <motion.h2
             className="text-4xl font-bold text-center mb-12 gradient-text"
@@ -171,7 +214,7 @@ export const Home: React.FC = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4" style={{ zIndex: 3 }}>
         <div className="max-w-4xl mx-auto">
           <motion.h2
             className="text-4xl font-bold text-center mb-12 gradient-text"
@@ -200,7 +243,7 @@ export const Home: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4" style={{ zIndex: 3 }}>
         <div className="max-w-4xl mx-auto text-center">
           <GlassMorphismCard>
             <motion.h2
